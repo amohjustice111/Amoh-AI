@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="AMOH AI — a simple notepad with a PIN-protected private area.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>AMOH AI Notes</title>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="AMOH AI home"><span class="brand-mark">A</span><span>AMOH <b>AI</b></span></a>
+    <button id="installBtn" class="quiet-button" hidden>Install app</button>
+  </header>
+
+  <main class="shell">
+    <section class="welcome">
+      <p class="eyebrow">YOUR PERSONAL SPACE</p>
+      <h1>Notes that stay<br><span>with you.</span></h1>
+      <p class="subhead">Capture thoughts, make lists, and keep your day organised.</p>
+    </section>
+
+    <section class="note-panel panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">NOTEBOOK</p><h2>My Notepad</h2></div>
+        <button id="newNoteBtn" class="primary-button">＋ New note</button>
+      </div>
+      <label class="sr-only" for="noteTitle">Note title</label>
+      <input id="noteTitle" class="title-input" maxlength="90" placeholder="Note title">
+      <label class="sr-only" for="noteBody">Write your note</label>
+      <textarea id="noteBody" rows="7" placeholder="Write something worth remembering…"></textarea>
+      <div class="note-footer"><span id="saveStatus" aria-live="polite">Saved on this device</span><button id="deleteNoteBtn" class="text-button">Delete note</button></div>
+      <div id="notesList" class="notes-list" aria-label="Saved notes"></div>
+    </section>
+
+    <button id="secretBtn" class="secret-entry panel">
+      <span class="lock-icon">⌑</span><span><b>My Secret</b><small>Open your private space</small></span><span class="chevron">›</span>
+    </button>
+
+    <p class="fine-print">Your notes are stored in this browser on this device. Back them up before clearing browser data.</p>
+  </main>
+
+  <dialog id="pinDialog" class="dialog">
+    <form method="dialog" class="dialog-card" id="pinForm">
+      <button class="close-button" value="cancel" aria-label="Close">×</button>
+      <div class="dialog-symbol">⌑</div>
+      <p class="eyebrow">PRIVATE ACCESS</p>
+      <h2 id="pinHeading">Create your PIN</h2>
+      <p id="pinHint" class="dialog-copy">Choose a four-digit PIN for your private space.</p>
+      <label class="sr-only" for="pinInput">Four-digit PIN</label>
+      <input id="pinInput" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" placeholder="••••" required>
+      <p id="pinMessage" class="message" aria-live="polite"></p>
+      <button id="pinSubmit" class="primary-button full-button" value="default">Continue</button>
+    </form>
+  </dialog>
+
+  <dialog id="privateDialog" class="dialog">
+    <div class="dialog-card private-card">
+      <button id="closePrivate" class="close-button" aria-label="Close">×</button>
+      <p class="eyebrow">AMOH AI / PRIVATE</p>
+      <h2>Your private space</h2>
+      <p class="dialog-copy">This starter version can save private shortcuts and links here. It cannot hide or launch installed Android apps.</p>
+      <label for="shortcutName">Shortcut name</label>
+      <input id="shortcutName" class="standard-input" maxlength="50" placeholder="e.g. My study page">
+      <label for="shortcutUrl">Website address</label>
+      <input id="shortcutUrl" class="standard-input" type="url" placeholder="https://example.com">
+      <button id="addShortcutBtn" class="primary-button full-button">Add private shortcut</button>
+      <div id="shortcutList" class="shortcut-list"></div>
+      <button id="changePinBtn" class="text-button">Change PIN</button>
+    </div>
+  </dialog>
+  <script src="./app.js" defer></script>
+</body>
+</html>
