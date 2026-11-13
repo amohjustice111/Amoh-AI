@@ -3,50 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101a2b">
-  <meta name="description" content="AMOH AI — a simple notepad with a PIN-protected private area.">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="description" content="AMOH AI Notepad — write, organise and save your notes.">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./styles.css">
-  <title>AMOH AI Notes</title>
+  <title>AMOH AI Notepad</title>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="./" aria-label="AMOH AI home"><span class="brand-mark">A</span><span>AMOH <b>AI</b></span></a>
-    <button id="installBtn" class="quiet-button" hidden>Install app</button>
+  <header class="appbar">
+    <a class="brand" href="./"><span class="brand-mark">A</span><span>AMOH <b>AI</b></span></a>
+    <div class="appbar-actions">
+      <span class="sync-label"><i></i> Saved on this device</span>
+      <button id="installBtn" class="install-button" hidden>Install app</button>
+      <button id="secretBtn" class="secret-button"><span>▣</span> My Secret</button>
+    </div>
   </header>
 
-  <main class="shell">
-    <section class="welcome">
-      <p class="eyebrow">YOUR PERSONAL SPACE</p>
-      <h1>Notes that stay<br><span>with you.</span></h1>
-      <p class="subhead">Capture thoughts, make lists, and keep your day organised.</p>
-    </section>
-
-    <section class="note-panel panel">
-      <div class="section-heading">
-        <div><p class="eyebrow">NOTEBOOK</p><h2>My Notepad</h2></div>
-        <button id="newNoteBtn" class="primary-button">＋ New note</button>
-      </div>
-      <label class="sr-only" for="noteTitle">Note title</label>
-      <input id="noteTitle" class="title-input" maxlength="90" placeholder="Note title">
-      <label class="sr-only" for="noteBody">Write your note</label>
-      <textarea id="noteBody" rows="7" placeholder="Write something worth remembering…"></textarea>
-      <div class="note-footer"><span id="saveStatus" aria-live="polite">Saved on this device</span><button id="deleteNoteBtn" class="text-button">Delete note</button></div>
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h1>My Notes</h1></div><button id="newNoteBtn" class="new-button" title="Create a new note">＋</button></div>
+      <label class="search-box"><span>⌕</span><input id="searchNotes" type="search" placeholder="Search notes..." aria-label="Search notes"></label>
+      <div class="list-caption"><span>ALL NOTES</span><span id="noteCount">0</span></div>
       <div id="notesList" class="notes-list" aria-label="Saved notes"></div>
+      <div class="sidebar-bottom"><span class="avatar">A</span><span><b>AMOH AI</b><small>Personal notepad</small></span></div>
+    </aside>
+
+    <section class="editor-area">
+      <div class="editor-topline"><div class="crumb">My Notes <span>›</span> <b id="currentNoteLabel">New note</b></div><button id="deleteNoteBtn" class="delete-button" title="Delete current note">Delete note</button></div>
+      <div class="editor-sheet">
+        <input id="noteTitle" class="title-input" maxlength="100" placeholder="Untitled note" aria-label="Note title">
+        <div class="editor-meta"><span id="noteDate">Start writing</span><span id="saveStatus" aria-live="polite">Ready</span></div>
+        <div class="toolbar" role="toolbar" aria-label="Notepad tools">
+          <button id="insertDateBtn" title="Insert today's date">Date</button>
+          <span class="tool-divider"></span>
+          <button id="clearBtn" title="Clear the current note">Clear</button>
+          <span class="tool-spacer"></span>
+          <span id="wordCount">0 words · 0 characters</span>
+        </div>
+        <label class="sr-only" for="noteBody">Note text</label>
+        <textarea id="noteBody" spellcheck="true" placeholder="Start typing your note here..."></textarea>
+      </div>
+      <footer class="editor-footer"><span>AMOH AI Notepad</span><span>Autosave is on</span></footer>
     </section>
-
-    <button id="secretBtn" class="secret-entry panel">
-      <span class="lock-icon">⌑</span><span><b>My Secret</b><small>Open your private space</small></span><span class="chevron">›</span>
-    </button>
-
-    <p class="fine-print">Your notes are stored in this browser on this device. Back them up before clearing browser data.</p>
   </main>
 
   <dialog id="pinDialog" class="dialog">
     <form method="dialog" class="dialog-card" id="pinForm">
       <button class="close-button" value="cancel" aria-label="Close">×</button>
-      <div class="dialog-symbol">⌑</div>
-      <p class="eyebrow">PRIVATE ACCESS</p>
+      <div class="dialog-symbol">▣</div><p class="eyebrow">PRIVATE ACCESS</p>
       <h2 id="pinHeading">Create your PIN</h2>
       <p id="pinHint" class="dialog-copy">Choose a four-digit PIN for your private space.</p>
       <label class="sr-only" for="pinInput">Four-digit PIN</label>
@@ -59,13 +63,10 @@
   <dialog id="privateDialog" class="dialog">
     <div class="dialog-card private-card">
       <button id="closePrivate" class="close-button" aria-label="Close">×</button>
-      <p class="eyebrow">AMOH AI / PRIVATE</p>
-      <h2>Your private space</h2>
-      <p class="dialog-copy">This starter version can save private shortcuts and links here. It cannot hide or launch installed Android apps.</p>
-      <label for="shortcutName">Shortcut name</label>
-      <input id="shortcutName" class="standard-input" maxlength="50" placeholder="e.g. My study page">
-      <label for="shortcutUrl">Website address</label>
-      <input id="shortcutUrl" class="standard-input" type="url" placeholder="https://example.com">
+      <p class="eyebrow">AMOH AI / PRIVATE</p><h2>Your private space</h2>
+      <p class="dialog-copy">Save private website shortcuts here. This web version cannot hide or launch installed Android apps.</p>
+      <label for="shortcutName">Shortcut name</label><input id="shortcutName" class="standard-input" maxlength="50" placeholder="e.g. My study page">
+      <label for="shortcutUrl">Website address</label><input id="shortcutUrl" class="standard-input" type="url" placeholder="https://example.com">
       <button id="addShortcutBtn" class="primary-button full-button">Add private shortcut</button>
       <div id="shortcutList" class="shortcut-list"></div>
       <button id="changePinBtn" class="text-button">Change PIN</button>
