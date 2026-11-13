@@ -230,18 +230,38 @@ $("addShortcutBtn").addEventListener("click", () => {
   $("shortcutUrl").value = "";
   renderShortcuts();
 });
+function isInstalled() {
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+}
+function updateInstallButton() {
+  $("installBtn").hidden = isInstalled();
+  $("installBtn").textContent = installPrompt ? "Install app" : "How to install";
+}
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
   installPrompt = event;
-  $("installBtn").hidden = false;
+  updateInstallButton();
 });
-$("installBtn").addEventListener("click", async () => {
-  if (!installPrompt) return;
-  installPrompt.prompt();
-  await installPrompt.userChoice;
+window.addEventListener("appinstalled", () => {
   installPrompt = null;
   $("installBtn").hidden = true;
 });
+$("installBtn").addEventListener("click", async () => {
+  if (installPrompt) {
+    installPrompt.prompt();
+    const choice = await installPrompt.userChoice;
+    installPrompt = null;
+    if (choice && choice.outcome === "accepted") {
+      $("installBtn").hidden = true;
+    } else {
+      updateInstallButton();
+    }
+    return;
+  }
+  alert("To install AMOH AI on Android: open this website in Google Chrome, tap the three dots (⋮), then choose Install app or Add to Home screen. On iPhone, open it in Safari, tap Share, then Add to Home Screen.");
+});
+updateInstallButton();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
 }
