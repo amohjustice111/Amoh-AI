@@ -41,6 +41,7 @@ private fun AmohLauncher() {
     var firstPin by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
     var unlocked by remember { mutableStateOf(false) }
+    var managing by remember { mutableStateOf(false) }
     val savedHash = prefs.getString("pin_hash", null)
 
     MaterialTheme(colorScheme = lightColorScheme(primary = androidx.compose.ui.graphics.Color(0xFF5B4BDB))) {
@@ -112,24 +113,27 @@ private fun AmohLauncher() {
                         Text(message)
                     }
                     else -> {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = { apps = loadApps(context) }) { Text("Refresh apps") }
-                            OutlinedButton(onClick = { pinInput = ""; message = ""; screen = "secret" }) { Text("My Secret") }
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Button(onClick = { managing = !managing }) { Text(if (managing) "Done" else "Manage apps") }
+                            OutlinedButton(onClick = { apps = loadApps(context) }) { Text("Refresh") }
+                            TextButton(onClick = { pinInput = ""; message = ""; screen = "secret" }) { Text("My Secret") }
                         }
-                        Text("Choose apps to hide from this launcher", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
+                        Text(if (managing) "Select apps to hide" else "Your apps", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
                         LazyColumn {
-                            items(apps.filter { it.packageName != context.packageName }) { app ->
+                            items(apps.filter { it.packageName != context.packageName && (managing || it.packageName !in hidden) }) { app ->
                                 Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(app.label, Modifier.weight(1f).clickable { launch(context, app) })
-                                    Checkbox(checked = app.packageName in hidden, onCheckedChange = { checked ->
-                                        hidden = if (checked) hidden + app.packageName else hidden - app.packageName
-                                        prefs.edit().putStringSet("hidden_apps", hidden).apply()
-                                    })
+                                    Text(app.label, Modifier.weight(1f).clickable { if (!managing) launch(context, app) })
+                                    if (managing) {
+                                        Checkbox(checked = app.packageName in hidden, onCheckedChange = { checked ->
+                                            hidden = if (checked) hidden + app.packageName else hidden - app.packageName
+                                            prefs.edit().putStringSet("hidden_apps", hidden).apply()
+                                        })
+                                    }
                                 }
                                 HorizontalDivider()
                             }
                         }
-                        Text("Only icons in AMOH AI are hidden. Android Settings and other launchers may still show these apps.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Hidden icons are removed only from AMOH AI. Android Settings and other launchers may still show installed apps.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
