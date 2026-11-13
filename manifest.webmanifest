@@ -1,0 +1,12 @@
+{
+  "id": "./",
+  "name": "AMOH AI Notes",
+  "short_name": "AMOH AI",
+  "description": "A simple notepad with a PIN-protected private area.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#101a2b",
+  "icons": []
+}
