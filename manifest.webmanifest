@@ -1,12 +1,21 @@
 {
   "id": "./",
-  "name": "AMOH AI Notes",
+  "name": "AMOH AI Notepad",
   "short_name": "AMOH AI",
-  "description": "A simple notepad with a PIN-protected private area.",
+  "description": "Write, organize, and keep your notes in AMOH AI.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#101a2b",
-  "icons": []
+  "orientation": "any",
+  "background_color": "#f3f5f8",
+  "theme_color": "#172b46",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/amoh-ai.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
